@@ -1,0 +1,235 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: EscrowFactory
+    network: polygon-amoy
+    source:
+      address: "0xE2B05184705A5b25De95DcEc77147B93B4a26f31"
+      abi: EscrowFactory
+      startBlock: 13247558
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - EscrowProxyDeployed
+        - OwnerUpdateInitiated
+        - OwnershipTransferred
+        - Paused
+        - RegistryUpdated
+        - Unpaused
+      abis:
+        - name: EscrowFactory
+          file: ./abis/EscrowFactory.json
+      eventHandlers:
+        - event: EscrowProxyDeployed(address,address,uint8)
+          handler: handleEscrowProxyDeployed
+        - event: OwnerUpdateInitiated(indexed address,indexed address)
+          handler: handleOwnerUpdateInitiated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: RegistryUpdated(address)
+          handler: handleRegistryUpdated
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/escrow-factory.ts
+templates:
+  - kind: ethereum
+    name: EscrowFixedPrice
+    network: polygon-amoy
+    source:
+      abi: EscrowFixedPrice
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminManagerUpdated
+        - Approved
+        - Claimed
+        - ClientOwnershipTransferred
+        - ContractorOwnershipTransferred
+        - Deposited
+        - DisputeCreated
+        - DisputeResolved
+        - Refilled
+        - EscrowFixedPriceRegistryUpdated
+        - ReturnApproved
+        - ReturnCanceled
+        - ReturnRequested
+        - Submitted
+        - Withdrawn
+      abis:
+        - name: EscrowFixedPrice
+          file: ./abis/EscrowFixedPrice.json
+      eventHandlers:
+        - event: AdminManagerUpdated(address)
+          handler: handleAdminManagerUpdated
+        - event: Approved(indexed address,indexed uint256,uint256,indexed address)
+          handler: handleApproved
+        - event: Claimed(indexed address,indexed uint256,address,uint256)
+          handler: handleClaimed
+        - event: ClientOwnershipTransferred(indexed address,indexed address)
+          handler: handleClientOwnershipTransferred
+        - event: ContractorOwnershipTransferred(indexed uint256,indexed address,indexed address)
+          handler: handleContractorOwnershipTransferred
+        - event: Deposited(indexed address,indexed uint256,address,uint256,uint8)
+          handler: handleDeposited
+        - event: DisputeCreated(indexed address,uint256)
+          handler: handleDisputeCreated
+        - event: DisputeResolved(indexed address,uint256,uint8,uint256,uint256)
+          handler: handleDisputeResolved
+        - event: Refilled(indexed address,indexed uint256,uint256)
+          handler: handleRefilled
+        - event: RegistryUpdated(address)
+          handler: handleRegistryUpdated
+        - event: ReturnApproved(indexed address,uint256)
+          handler: handleReturnApproved
+        - event: ReturnCanceled(indexed address,uint256)
+          handler: handleReturnCanceled
+        - event: ReturnRequested(indexed address,uint256)
+          handler: handleReturnRequested
+        - event: Submitted(indexed address,indexed uint256)
+          handler: handleSubmitted
+        - event: Withdrawn(indexed address,indexed uint256,address,uint256)
+          handler: handleWithdrawn
+      file: ./src/escrow-fixed-price.ts
+  - kind: ethereum
+    name: EscrowMilestone
+    network: polygon-amoy
+    source:
+      abi: EscrowMilestone
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - EscrowMilestoneAdminManagerUpdated
+        - EscrowMilestoneApproved
+        - BulkClaimed
+        - EscrowMilestoneClaimed
+        - EscrowMilestoneClientOwnershipTransferred
+        - EscrowMilestoneContractorOwnershipTransferred
+        - EscrowMilestoneDeposited
+        - EscrowMilestoneDisputeCreated
+        - EscrowMilestoneDisputeResolved
+        - MaxMilestonesSet
+        - EscrowMilestoneRefilled
+        - EscrowMilestoneRegistryUpdated
+        - EscrowMilestoneReturnApproved
+        - EscrowMilestoneReturnCanceled
+        - EscrowMilestoneReturnRequested
+        - EscrowMilestoneSubmitted
+        - EscrowMilestoneWithdrawn
+      abis:
+        - name: EscrowMilestone
+          file: ./abis/EscrowMilestone.json
+      eventHandlers:
+        - event: AdminManagerUpdated(address)
+          handler: handleAdminManagerUpdated
+        - event: Approved(indexed address,indexed uint256,indexed uint256,uint256,address)
+          handler: handleApproved
+        - event: BulkClaimed(indexed address,indexed
+            uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleBulkClaimed
+        - event: Claimed(indexed address,indexed uint256,indexed uint256,uint256)
+          handler: handleClaimed
+        - event: ClientOwnershipTransferred(indexed address,indexed address)
+          handler: handleClientOwnershipTransferred
+        - event: ContractorOwnershipTransferred(indexed uint256,indexed uint256,address,indexed
+            address)
+          handler: handleContractorOwnershipTransferred
+        - event: Deposited(indexed address,indexed uint256,indexed uint256,address,uint256,uint8)
+          handler: handleDeposited
+        - event: DisputeCreated(indexed address,indexed uint256,indexed uint256)
+          handler: handleDisputeCreated
+        - event: DisputeResolved(indexed address,indexed uint256,indexed
+            uint256,uint8,uint256,uint256)
+          handler: handleDisputeResolved
+        - event: MaxMilestonesSet(uint256)
+          handler: handleMaxMilestonesSet
+        - event: Refilled(indexed address,indexed uint256,indexed uint256,uint256)
+          handler: handleRefilled
+        - event: RegistryUpdated(address)
+          handler: handleRegistryUpdated
+        - event: ReturnApproved(indexed address,indexed uint256,indexed uint256)
+          handler: handleReturnApproved
+        - event: ReturnCanceled(indexed address,indexed uint256,indexed uint256)
+          handler: handleReturnCanceled
+        - event: ReturnRequested(indexed address,indexed uint256,indexed uint256)
+          handler: handleReturnRequested
+        - event: Submitted(indexed address,indexed uint256,indexed uint256)
+          handler: handleSubmitted
+        - event: Withdrawn(indexed address,indexed uint256,indexed uint256,uint256)
+          handler: handleWithdrawn
+      file: ./src/escrow-milestone.ts
+  - kind: ethereum
+    name: EscrowHourly
+    network: polygon-amoy
+    source:
+      abi: EscrowHourly
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - EscrowHourlyAdminManagerUpdated
+        - EscrowHourlyApproved
+        - EscrowHourlyBulkClaimed
+        - EscrowHourlyClaimed
+        - EscrowHourlyClientOwnershipTransferred
+        - EscrowHourlyContractorOwnershipTransferred
+        - EscrowHourlyDeposited
+        - EscrowHourlyDisputeCreated
+        - EscrowHourlyDisputeResolved
+        - RefilledPrepayment
+        - RefilledWeekPayment
+        - EscrowHourlyRegistryUpdated
+        - EscrowHourlyReturnApproved
+        - EscrowHourlyReturnCanceled
+        - EscrowHourlyReturnRequested
+        - EscrowHourlyWithdrawn
+      abis:
+        - name: EscrowHourly
+          file: ./abis/EscrowHourly.json
+      eventHandlers:
+        - event: AdminManagerUpdated(address)
+          handler: handleAdminManagerUpdated
+        - event: Approved(indexed address,indexed uint256,uint256,uint256,address)
+          handler: handleApproved
+        - event: BulkClaimed(indexed address,indexed
+            uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleBulkClaimed
+        - event: Claimed(indexed address,indexed uint256,uint256,uint256)
+          handler: handleClaimed
+        - event: ClientOwnershipTransferred(indexed address,indexed address)
+          handler: handleClientOwnershipTransferred
+        - event: ContractorOwnershipTransferred(indexed uint256,indexed address,indexed address)
+          handler: handleContractorOwnershipTransferred
+        - event: Deposited(indexed address,indexed uint256,uint256,address,uint256)
+          handler: handleDeposited
+        - event: DisputeCreated(indexed address,indexed uint256,uint256)
+          handler: handleDisputeCreated
+        - event: DisputeResolved(indexed address,indexed uint256,uint256,uint8,uint256,uint256)
+          handler: handleDisputeResolved
+        - event: RefilledPrepayment(indexed address,indexed uint256,uint256)
+          handler: handleRefilledPrepayment
+        - event: RefilledWeekPayment(indexed address,indexed uint256,uint256,uint256)
+          handler: handleRefilledWeekPayment
+        - event: RegistryUpdated(address)
+          handler: handleRegistryUpdated
+        - event: ReturnApproved(indexed address,indexed uint256,uint256)
+          handler: handleReturnApproved
+        - event: ReturnCanceled(indexed address,indexed uint256,uint256)
+          handler: handleReturnCanceled
+        - event: ReturnRequested(indexed address,indexed uint256,uint256)
+          handler: handleReturnRequested
+        - event: Withdrawn(indexed address,indexed uint256,uint256,uint256)
+          handler: handleWithdrawn
+      file: ./src/escrow-hourly.ts

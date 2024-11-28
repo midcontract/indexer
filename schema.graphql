@@ -1,0 +1,543 @@
+type EscrowProxyDeployed @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  deployedProxy: Bytes! # address
+  escrowType: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnerUpdateInitiated @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  ownerCandidate: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Paused @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RegistryUpdated @entity(immutable: true) {
+  id: Bytes!
+  registry: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Unpaused @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type AdminManagerUpdated @entity(immutable: true) {
+  id: Bytes!
+  adminManager: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Approved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  amountApprove: BigInt! # uint256
+  receiver: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Claimed @entity(immutable: true) {
+  id: Bytes!
+  contractor: Bytes! # address
+  contractId: BigInt! # uint256
+  paymentToken: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ClientOwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ContractorOwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  contractId: BigInt! # uint256
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Deposited @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  paymentToken: Bytes! # address
+  amount: BigInt! # uint256
+  feeConfig: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DisputeCreated @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DisputeResolved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  winner: Int! # uint8
+  clientAmount: BigInt! # uint256
+  contractorAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Refilled @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  amountAdditional: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowFixedPriceRegistryUpdated @entity(immutable: true) {
+  id: Bytes!
+  registry: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ReturnApproved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ReturnCanceled @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ReturnRequested @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Submitted @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Withdrawn @entity(immutable: true) {
+  id: Bytes!
+  withdrawer: Bytes! # address
+  contractId: BigInt! # uint256
+  paymentToken: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type EscrowMilestoneAdminManagerUpdated @entity(immutable: true) {
+  id: Bytes!
+  adminManager: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneApproved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  amountApprove: BigInt! # uint256
+  receiver: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type BulkClaimed @entity(immutable: true) {
+  id: Bytes!
+  contractor: Bytes! # address
+  contractId: BigInt! # uint256
+  startMilestoneId: BigInt! # uint256
+  endMilestoneId: BigInt! # uint256
+  totalClaimedAmount: BigInt! # uint256
+  totalFeeAmount: BigInt! # uint256
+  totalClientFee: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneClaimed @entity(immutable: true) {
+  id: Bytes!
+  contractor: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneClientOwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneContractorOwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneDeposited @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  paymentToken: Bytes! # address
+  amount: BigInt! # uint256
+  feeConfig: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneDisputeCreated @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneDisputeResolved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  winner: Int! # uint8
+  clientAmount: BigInt! # uint256
+  contractorAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MaxMilestonesSet @entity(immutable: true) {
+  id: Bytes!
+  maxMilestones: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneRefilled @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  amountAdditional: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneRegistryUpdated @entity(immutable: true) {
+  id: Bytes!
+  registry: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneReturnApproved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneReturnCanceled @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneReturnRequested @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneSubmitted @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  milestoneId: BigInt! # uint256
+  contractId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowMilestoneWithdrawn @entity(immutable: true) {
+  id: Bytes!
+  withdrawer: Bytes! # address
+  contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type EscrowHourlyAdminManagerUpdated @entity(immutable: true) {
+  id: Bytes!
+  adminManager: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyApproved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  amountApprove: BigInt! # uint256
+  receiver: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyBulkClaimed @entity(immutable: true) {
+  id: Bytes!
+  contractor: Bytes! # address
+  contractId: BigInt! # uint256
+  startWeekId: BigInt! # uint256
+  endWeekId: BigInt! # uint256
+  totalClaimedAmount: BigInt! # uint256
+  totalFeeAmount: BigInt! # uint256
+  totalClientFee: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyClaimed @entity(immutable: true) {
+  id: Bytes!
+  contractor: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyClientOwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyContractorOwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  contractId: BigInt! # uint256
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyDeposited @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  paymentToken: Bytes! # address
+  totalDepositAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyDisputeCreated @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyDisputeResolved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  winner: Int! # uint8
+  clientAmount: BigInt! # uint256
+  contractorAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RefilledPrepayment @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RefilledWeekPayment @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyRegistryUpdated @entity(immutable: true) {
+  id: Bytes!
+  registry: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyReturnApproved @entity(immutable: true) {
+  id: Bytes!
+  approver: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyReturnCanceled @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyReturnRequested @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowHourlyWithdrawn @entity(immutable: true) {
+  id: Bytes!
+  withdrawer: Bytes! # address
+  contractId: BigInt! # uint256
+  weekId: BigInt! # uint256
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
