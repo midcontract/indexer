@@ -70,8 +70,9 @@ export function createApprovedEvent(
 export function createClaimedEvent(
   contractor: Address,
   contractId: BigInt,
-  paymentToken: Address,
-  amount: BigInt
+  amount: BigInt,
+  feeAmount: BigInt,
+  client: Address
 ): Claimed {
   let claimedEvent = changetype<Claimed>(newMockEvent())
 
@@ -90,13 +91,16 @@ export function createClaimedEvent(
     )
   )
   claimedEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+  claimedEvent.parameters.push(
     new ethereum.EventParam(
-      "paymentToken",
-      ethereum.Value.fromAddress(paymentToken)
+      "feeAmount",
+      ethereum.Value.fromUnsignedBigInt(feeAmount)
     )
   )
   claimedEvent.parameters.push(
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
   )
 
   return claimedEvent
@@ -155,18 +159,17 @@ export function createContractorOwnershipTransferredEvent(
 }
 
 export function createDepositedEvent(
-  sender: Address,
+  depositor: Address,
   contractId: BigInt,
-  paymentToken: Address,
-  amount: BigInt,
-  feeConfig: i32
+  totalDepositAmount: BigInt,
+  contractor: Address
 ): Deposited {
   let depositedEvent = changetype<Deposited>(newMockEvent())
 
   depositedEvent.parameters = new Array()
 
   depositedEvent.parameters.push(
-    new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
+    new ethereum.EventParam("depositor", ethereum.Value.fromAddress(depositor))
   )
   depositedEvent.parameters.push(
     new ethereum.EventParam(
@@ -176,17 +179,14 @@ export function createDepositedEvent(
   )
   depositedEvent.parameters.push(
     new ethereum.EventParam(
-      "paymentToken",
-      ethereum.Value.fromAddress(paymentToken)
+      "totalDepositAmount",
+      ethereum.Value.fromUnsignedBigInt(totalDepositAmount)
     )
   )
   depositedEvent.parameters.push(
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
-  )
-  depositedEvent.parameters.push(
     new ethereum.EventParam(
-      "feeConfig",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(feeConfig))
+      "contractor",
+      ethereum.Value.fromAddress(contractor)
     )
   )
 
@@ -195,7 +195,8 @@ export function createDepositedEvent(
 
 export function createDisputeCreatedEvent(
   sender: Address,
-  contractId: BigInt
+  contractId: BigInt,
+  client: Address
 ): DisputeCreated {
   let disputeCreatedEvent = changetype<DisputeCreated>(newMockEvent())
 
@@ -210,6 +211,9 @@ export function createDisputeCreatedEvent(
       ethereum.Value.fromUnsignedBigInt(contractId)
     )
   )
+  disputeCreatedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
+  )
 
   return disputeCreatedEvent
 }
@@ -219,7 +223,8 @@ export function createDisputeResolvedEvent(
   contractId: BigInt,
   winner: i32,
   clientAmount: BigInt,
-  contractorAmount: BigInt
+  contractorAmount: BigInt,
+  client: Address
 ): DisputeResolved {
   let disputeResolvedEvent = changetype<DisputeResolved>(newMockEvent())
 
@@ -251,6 +256,9 @@ export function createDisputeResolvedEvent(
       "contractorAmount",
       ethereum.Value.fromUnsignedBigInt(contractorAmount)
     )
+  )
+  disputeResolvedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
   )
 
   return disputeResolvedEvent
@@ -298,7 +306,8 @@ export function createRegistryUpdatedEvent(registry: Address): RegistryUpdated {
 
 export function createReturnApprovedEvent(
   approver: Address,
-  contractId: BigInt
+  contractId: BigInt,
+  client: Address
 ): ReturnApproved {
   let returnApprovedEvent = changetype<ReturnApproved>(newMockEvent())
 
@@ -312,6 +321,9 @@ export function createReturnApprovedEvent(
       "contractId",
       ethereum.Value.fromUnsignedBigInt(contractId)
     )
+  )
+  returnApprovedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
   )
 
   return returnApprovedEvent
@@ -361,7 +373,8 @@ export function createReturnRequestedEvent(
 
 export function createSubmittedEvent(
   sender: Address,
-  contractId: BigInt
+  contractId: BigInt,
+  client: Address
 ): Submitted {
   let submittedEvent = changetype<Submitted>(newMockEvent())
 
@@ -376,6 +389,9 @@ export function createSubmittedEvent(
       ethereum.Value.fromUnsignedBigInt(contractId)
     )
   )
+  submittedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
+  )
 
   return submittedEvent
 }
@@ -383,8 +399,8 @@ export function createSubmittedEvent(
 export function createWithdrawnEvent(
   withdrawer: Address,
   contractId: BigInt,
-  paymentToken: Address,
-  amount: BigInt
+  amount: BigInt,
+  feeAmount: BigInt
 ): Withdrawn {
   let withdrawnEvent = changetype<Withdrawn>(newMockEvent())
 
@@ -403,13 +419,13 @@ export function createWithdrawnEvent(
     )
   )
   withdrawnEvent.parameters.push(
-    new ethereum.EventParam(
-      "paymentToken",
-      ethereum.Value.fromAddress(paymentToken)
-    )
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
   withdrawnEvent.parameters.push(
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+    new ethereum.EventParam(
+      "feeAmount",
+      ethereum.Value.fromUnsignedBigInt(feeAmount)
+    )
   )
 
   return withdrawnEvent

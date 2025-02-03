@@ -8,14 +8,16 @@ dataSources:
     name: EscrowFactory
     network: polygon-amoy
     source:
-      address: "0xE2B05184705A5b25De95DcEc77147B93B4a26f31"
+      address: "0x44BB077F73FD6136187EA408F695f7508E88e236"
       abi: EscrowFactory
-      startBlock: 13247558
+      startBlock: 17213397
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
+        - EscrowFactoryAdminManagerUpdated
+        - ETHWithdrawn
         - EscrowProxyDeployed
         - OwnerUpdateInitiated
         - OwnershipTransferred
@@ -26,6 +28,10 @@ dataSources:
         - name: EscrowFactory
           file: ./abis/EscrowFactory.json
       eventHandlers:
+        - event: AdminManagerUpdated(address)
+          handler: handleAdminManagerUpdated
+        - event: ETHWithdrawn(address,uint256)
+          handler: handleETHWithdrawn
         - event: EscrowProxyDeployed(address,address,uint8)
           handler: handleEscrowProxyDeployed
         - event: OwnerUpdateInitiated(indexed address,indexed address)
@@ -73,31 +79,31 @@ templates:
           handler: handleAdminManagerUpdated
         - event: Approved(indexed address,indexed uint256,uint256,indexed address)
           handler: handleApproved
-        - event: Claimed(indexed address,indexed uint256,address,uint256)
+        - event: Claimed(indexed address,indexed uint256,uint256,uint256,indexed address)
           handler: handleClaimed
         - event: ClientOwnershipTransferred(indexed address,indexed address)
           handler: handleClientOwnershipTransferred
         - event: ContractorOwnershipTransferred(indexed uint256,indexed address,indexed address)
           handler: handleContractorOwnershipTransferred
-        - event: Deposited(indexed address,indexed uint256,address,uint256,uint8)
+        - event: Deposited(indexed address,indexed uint256,uint256,indexed address)
           handler: handleDeposited
-        - event: DisputeCreated(indexed address,uint256)
+        - event: DisputeCreated(indexed address,uint256,indexed address)
           handler: handleDisputeCreated
-        - event: DisputeResolved(indexed address,uint256,uint8,uint256,uint256)
+        - event: DisputeResolved(indexed address,uint256,uint8,uint256,uint256,indexed address)
           handler: handleDisputeResolved
         - event: Refilled(indexed address,indexed uint256,uint256)
           handler: handleRefilled
         - event: RegistryUpdated(address)
           handler: handleRegistryUpdated
-        - event: ReturnApproved(indexed address,uint256)
+        - event: ReturnApproved(indexed address,uint256,indexed address)
           handler: handleReturnApproved
         - event: ReturnCanceled(indexed address,uint256)
           handler: handleReturnCanceled
         - event: ReturnRequested(indexed address,uint256)
           handler: handleReturnRequested
-        - event: Submitted(indexed address,indexed uint256)
+        - event: Submitted(indexed address,indexed uint256,indexed address)
           handler: handleSubmitted
-        - event: Withdrawn(indexed address,indexed uint256,address,uint256)
+        - event: Withdrawn(indexed address,indexed uint256,uint256,uint256)
           handler: handleWithdrawn
       file: ./src/escrow-fixed-price.ts
   - kind: ethereum
@@ -136,21 +142,21 @@ templates:
         - event: Approved(indexed address,indexed uint256,indexed uint256,uint256,address)
           handler: handleApproved
         - event: BulkClaimed(indexed address,indexed
-            uint256,uint256,uint256,uint256,uint256,uint256)
+            uint256,uint256,uint256,uint256,uint256,uint256,indexed address)
           handler: handleBulkClaimed
-        - event: Claimed(indexed address,indexed uint256,indexed uint256,uint256)
+        - event: Claimed(indexed address,indexed uint256,uint256,uint256,uint256,indexed address)
           handler: handleClaimed
         - event: ClientOwnershipTransferred(indexed address,indexed address)
           handler: handleClientOwnershipTransferred
         - event: ContractorOwnershipTransferred(indexed uint256,indexed uint256,address,indexed
             address)
           handler: handleContractorOwnershipTransferred
-        - event: Deposited(indexed address,indexed uint256,indexed uint256,address,uint256,uint8)
+        - event: Deposited(indexed address,indexed uint256,uint256,uint256,indexed address)
           handler: handleDeposited
-        - event: DisputeCreated(indexed address,indexed uint256,indexed uint256)
+        - event: DisputeCreated(indexed address,indexed uint256,uint256,indexed address)
           handler: handleDisputeCreated
-        - event: DisputeResolved(indexed address,indexed uint256,indexed
-            uint256,uint8,uint256,uint256)
+        - event: DisputeResolved(indexed address,indexed
+            uint256,uint256,uint8,uint256,uint256,indexed address)
           handler: handleDisputeResolved
         - event: MaxMilestonesSet(uint256)
           handler: handleMaxMilestonesSet
@@ -158,15 +164,15 @@ templates:
           handler: handleRefilled
         - event: RegistryUpdated(address)
           handler: handleRegistryUpdated
-        - event: ReturnApproved(indexed address,indexed uint256,indexed uint256)
+        - event: ReturnApproved(indexed address,indexed uint256,uint256,indexed address)
           handler: handleReturnApproved
         - event: ReturnCanceled(indexed address,indexed uint256,indexed uint256)
           handler: handleReturnCanceled
         - event: ReturnRequested(indexed address,indexed uint256,indexed uint256)
           handler: handleReturnRequested
-        - event: Submitted(indexed address,indexed uint256,indexed uint256)
+        - event: Submitted(indexed address,indexed uint256,uint256,indexed address)
           handler: handleSubmitted
-        - event: Withdrawn(indexed address,indexed uint256,indexed uint256,uint256)
+        - event: Withdrawn(indexed address,indexed uint256,indexed uint256,uint256,uint256)
           handler: handleWithdrawn
       file: ./src/escrow-milestone.ts
   - kind: ethereum
@@ -204,19 +210,20 @@ templates:
         - event: Approved(indexed address,indexed uint256,uint256,uint256,address)
           handler: handleApproved
         - event: BulkClaimed(indexed address,indexed
-            uint256,uint256,uint256,uint256,uint256,uint256)
+            uint256,uint256,uint256,uint256,uint256,uint256,indexed address)
           handler: handleBulkClaimed
-        - event: Claimed(indexed address,indexed uint256,uint256,uint256)
+        - event: Claimed(indexed address,indexed uint256,uint256,uint256,uint256,indexed address)
           handler: handleClaimed
         - event: ClientOwnershipTransferred(indexed address,indexed address)
           handler: handleClientOwnershipTransferred
         - event: ContractorOwnershipTransferred(indexed uint256,indexed address,indexed address)
           handler: handleContractorOwnershipTransferred
-        - event: Deposited(indexed address,indexed uint256,uint256,address,uint256)
+        - event: Deposited(indexed address,indexed uint256,uint256,uint256,indexed address)
           handler: handleDeposited
-        - event: DisputeCreated(indexed address,indexed uint256,uint256)
+        - event: DisputeCreated(indexed address,indexed uint256,uint256,indexed address)
           handler: handleDisputeCreated
-        - event: DisputeResolved(indexed address,indexed uint256,uint256,uint8,uint256,uint256)
+        - event: DisputeResolved(indexed address,indexed
+            uint256,uint256,uint8,uint256,uint256,indexed address)
           handler: handleDisputeResolved
         - event: RefilledPrepayment(indexed address,indexed uint256,uint256)
           handler: handleRefilledPrepayment
@@ -224,11 +231,11 @@ templates:
           handler: handleRefilledWeekPayment
         - event: RegistryUpdated(address)
           handler: handleRegistryUpdated
-        - event: ReturnApproved(indexed address,indexed uint256,uint256)
+        - event: ReturnApproved(indexed address,indexed uint256,indexed address)
           handler: handleReturnApproved
-        - event: ReturnCanceled(indexed address,indexed uint256,uint256)
+        - event: ReturnCanceled(indexed address,indexed uint256)
           handler: handleReturnCanceled
-        - event: ReturnRequested(indexed address,indexed uint256,uint256)
+        - event: ReturnRequested(indexed address,indexed uint256)
           handler: handleReturnRequested
         - event: Withdrawn(indexed address,indexed uint256,uint256,uint256)
           handler: handleWithdrawn

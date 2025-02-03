@@ -14,7 +14,7 @@ import {
   ReturnRequested as ReturnRequestedEvent,
   Submitted as SubmittedEvent,
   Withdrawn as WithdrawnEvent,
-} from "../generated/templates/EscrowFixedPrice/EscrowFixedPrice"
+} from "../generated/EscrowFixedPrice/EscrowFixedPrice"
 import {
   AdminManagerUpdated,
   Approved,
@@ -32,7 +32,6 @@ import {
   Submitted,
   Withdrawn,
 } from "../generated/schema"
-import { log } from '@graphprotocol/graph-ts'
 
 export function handleAdminManagerUpdated(
   event: AdminManagerUpdatedEvent,
@@ -71,8 +70,9 @@ export function handleClaimed(event: ClaimedEvent): void {
   )
   entity.contractor = event.params.contractor
   entity.contractId = event.params.contractId
-  entity.paymentToken = event.params.paymentToken
   entity.amount = event.params.amount
+  entity.feeAmount = event.params.feeAmount
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -115,15 +115,13 @@ export function handleContractorOwnershipTransferred(
 }
 
 export function handleDeposited(event: DepositedEvent): void {
-  log.info(`Handle Deposited {}`, [event.transaction.hash.toHexString()])
   let entity = new Deposited(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
-  entity.sender = event.params.sender
+  entity.depositor = event.params.depositor
   entity.contractId = event.params.contractId
-  entity.paymentToken = event.params.paymentToken
-  entity.amount = event.params.amount
-  entity.feeConfig = event.params.feeConfig
+  entity.totalDepositAmount = event.params.totalDepositAmount
+  entity.contractor = event.params.contractor
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -138,6 +136,7 @@ export function handleDisputeCreated(event: DisputeCreatedEvent): void {
   )
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -155,6 +154,7 @@ export function handleDisputeResolved(event: DisputeResolvedEvent): void {
   entity.winner = event.params.winner
   entity.clientAmount = event.params.clientAmount
   entity.contractorAmount = event.params.contractorAmount
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -197,6 +197,7 @@ export function handleReturnApproved(event: ReturnApprovedEvent): void {
   )
   entity.approver = event.params.approver
   entity.contractId = event.params.contractId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -239,6 +240,7 @@ export function handleSubmitted(event: SubmittedEvent): void {
   )
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -253,8 +255,8 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
   )
   entity.withdrawer = event.params.withdrawer
   entity.contractId = event.params.contractId
-  entity.paymentToken = event.params.paymentToken
   entity.amount = event.params.amount
+  entity.feeAmount = event.params.feeAmount
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

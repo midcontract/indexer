@@ -1,6 +1,9 @@
 [
   { "inputs": [], "name": "Escrow__AlreadyInitialized", "type": "error" },
+  { "inputs": [], "name": "Escrow__AuthorizationExpired", "type": "error" },
   { "inputs": [], "name": "Escrow__BlacklistedAccount", "type": "error" },
+  { "inputs": [], "name": "Escrow__ContractIdAlreadyExists", "type": "error" },
+  { "inputs": [], "name": "Escrow__ContractorMismatch", "type": "error" },
   { "inputs": [], "name": "Escrow__CreateDisputeNotAllowed", "type": "error" },
   {
     "inputs": [],
@@ -18,6 +21,7 @@
   },
   { "inputs": [], "name": "Escrow__InvalidFeeConfig", "type": "error" },
   { "inputs": [], "name": "Escrow__InvalidRange", "type": "error" },
+  { "inputs": [], "name": "Escrow__InvalidSignature", "type": "error" },
   { "inputs": [], "name": "Escrow__InvalidStatusForApprove", "type": "error" },
   { "inputs": [], "name": "Escrow__InvalidStatusForSubmit", "type": "error" },
   { "inputs": [], "name": "Escrow__InvalidStatusProvided", "type": "error" },
@@ -37,6 +41,7 @@
   { "inputs": [], "name": "Escrow__NotSetFeeManager", "type": "error" },
   { "inputs": [], "name": "Escrow__NotSupportedPaymentToken", "type": "error" },
   { "inputs": [], "name": "Escrow__OutOfRange", "type": "error" },
+  { "inputs": [], "name": "Escrow__PaymentTokenMismatch", "type": "error" },
   {
     "inputs": [],
     "name": "Escrow__ResolutionExceedsDepositedAmount",
@@ -157,6 +162,12 @@
         "internalType": "uint256",
         "name": "totalClientFee",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "client",
+        "type": "address"
       }
     ],
     "name": "BulkClaimed",
@@ -188,6 +199,18 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feeAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "client",
+        "type": "address"
       }
     ],
     "name": "Claimed",
@@ -260,15 +283,15 @@
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "paymentToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "totalDepositAmount",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "contractor",
+        "type": "address"
       }
     ],
     "name": "Deposited",
@@ -294,6 +317,12 @@
         "internalType": "uint256",
         "name": "weekId",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "client",
+        "type": "address"
       }
     ],
     "name": "DisputeCreated",
@@ -337,6 +366,12 @@
         "internalType": "uint256",
         "name": "contractorAmount",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "client",
+        "type": "address"
       }
     ],
     "name": "DisputeResolved",
@@ -427,10 +462,10 @@
         "type": "uint256"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "weekId",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "client",
+        "type": "address"
       }
     ],
     "name": "ReturnApproved",
@@ -450,12 +485,6 @@
         "internalType": "uint256",
         "name": "contractId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "weekId",
-        "type": "uint256"
       }
     ],
     "name": "ReturnCanceled",
@@ -474,12 +503,6 @@
         "indexed": true,
         "internalType": "uint256",
         "name": "contractId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "weekId",
         "type": "uint256"
       }
     ],
@@ -504,13 +527,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "weekId",
+        "name": "amount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "feeAmount",
         "type": "uint256"
       }
     ],
@@ -565,8 +588,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_weekId", "type": "uint256" }
+      { "internalType": "uint256", "name": "_contractId", "type": "uint256" }
     ],
     "name": "approveReturn",
     "outputs": [],
@@ -575,13 +597,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_weekId", "type": "uint256" },
-      {
-        "internalType": "enum Enums.Status",
-        "name": "_status",
-        "type": "uint8"
-      }
+      { "internalType": "uint256", "name": "_contractId", "type": "uint256" }
     ],
     "name": "cancelReturn",
     "outputs": [],
@@ -622,14 +638,34 @@
     ],
     "name": "contractDetails",
     "outputs": [
+      { "internalType": "address", "name": "contractor", "type": "address" },
       { "internalType": "address", "name": "paymentToken", "type": "address" },
       {
         "internalType": "uint256",
         "name": "prepaymentAmount",
         "type": "uint256"
       },
+      {
+        "internalType": "uint256",
+        "name": "amountToWithdraw",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum Enums.FeeConfig",
+        "name": "feeConfig",
+        "type": "uint8"
+      },
       { "internalType": "enum Enums.Status", "name": "status", "type": "uint8" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_contractId", "type": "uint256" }
+    ],
+    "name": "contractExists",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -645,19 +681,27 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
-      { "internalType": "address", "name": "_paymentToken", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "_prepaymentAmount",
-        "type": "uint256"
-      },
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "contractId",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "contractor",
             "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "paymentToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "prepaymentAmount",
+            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -665,23 +709,20 @@
             "type": "uint256"
           },
           {
-            "internalType": "uint256",
-            "name": "amountToWithdraw",
-            "type": "uint256"
-          },
-          {
             "internalType": "enum Enums.FeeConfig",
             "name": "feeConfig",
             "type": "uint8"
           },
+          { "internalType": "address", "name": "escrow", "type": "address" },
           {
-            "internalType": "enum Enums.Status",
-            "name": "weekStatus",
-            "type": "uint8"
-          }
+            "internalType": "uint256",
+            "name": "expiration",
+            "type": "uint256"
+          },
+          { "internalType": "bytes", "name": "signature", "type": "bytes" }
         ],
-        "internalType": "struct IEscrowHourly.WeeklyEntry",
-        "name": "_weeklyEntry",
+        "internalType": "struct IEscrowHourly.DepositRequest",
+        "name": "_deposit",
         "type": "tuple"
       }
     ],
@@ -691,9 +732,30 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getCurrentContractId",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      { "internalType": "address", "name": "_client", "type": "address" },
+      { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
+      { "internalType": "address", "name": "_contractor", "type": "address" },
+      { "internalType": "address", "name": "_paymentToken", "type": "address" },
+      {
+        "internalType": "uint256",
+        "name": "_prepaymentAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amountToClaim",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum Enums.FeeConfig",
+        "name": "_feeConfig",
+        "type": "uint8"
+      },
+      { "internalType": "uint256", "name": "_expiration", "type": "uint256" }
+    ],
+    "name": "getDepositHash",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -736,6 +798,17 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "contractId", "type": "uint256" }
+    ],
+    "name": "previousStatuses",
+    "outputs": [
+      { "internalType": "enum Enums.Status", "name": "", "type": "uint8" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
       { "internalType": "uint256", "name": "_weekId", "type": "uint256" },
       { "internalType": "uint256", "name": "_amount", "type": "uint256" },
@@ -765,8 +838,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_weekId", "type": "uint256" }
+      { "internalType": "uint256", "name": "_contractId", "type": "uint256" }
     ],
     "name": "requestReturn",
     "outputs": [],
@@ -838,18 +910,7 @@
     ],
     "name": "weeklyEntries",
     "outputs": [
-      { "internalType": "address", "name": "contractor", "type": "address" },
       { "internalType": "uint256", "name": "amountToClaim", "type": "uint256" },
-      {
-        "internalType": "uint256",
-        "name": "amountToWithdraw",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum Enums.FeeConfig",
-        "name": "feeConfig",
-        "type": "uint8"
-      },
       {
         "internalType": "enum Enums.Status",
         "name": "weekStatus",
@@ -861,8 +922,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_contractId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_weekId", "type": "uint256" }
+      { "internalType": "uint256", "name": "_contractId", "type": "uint256" }
     ],
     "name": "withdraw",
     "outputs": [],

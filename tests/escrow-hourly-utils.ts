@@ -79,7 +79,8 @@ export function createBulkClaimedEvent(
   endWeekId: BigInt,
   totalClaimedAmount: BigInt,
   totalFeeAmount: BigInt,
-  totalClientFee: BigInt
+  totalClientFee: BigInt,
+  client: Address
 ): BulkClaimed {
   let bulkClaimedEvent = changetype<BulkClaimed>(newMockEvent())
 
@@ -127,6 +128,9 @@ export function createBulkClaimedEvent(
       ethereum.Value.fromUnsignedBigInt(totalClientFee)
     )
   )
+  bulkClaimedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
+  )
 
   return bulkClaimedEvent
 }
@@ -135,7 +139,9 @@ export function createClaimedEvent(
   contractor: Address,
   contractId: BigInt,
   weekId: BigInt,
-  amount: BigInt
+  amount: BigInt,
+  feeAmount: BigInt,
+  client: Address
 ): Claimed {
   let claimedEvent = changetype<Claimed>(newMockEvent())
 
@@ -158,6 +164,15 @@ export function createClaimedEvent(
   )
   claimedEvent.parameters.push(
     new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+  claimedEvent.parameters.push(
+    new ethereum.EventParam(
+      "feeAmount",
+      ethereum.Value.fromUnsignedBigInt(feeAmount)
+    )
+  )
+  claimedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
   )
 
   return claimedEvent
@@ -219,8 +234,8 @@ export function createDepositedEvent(
   sender: Address,
   contractId: BigInt,
   weekId: BigInt,
-  paymentToken: Address,
-  totalDepositAmount: BigInt
+  totalDepositAmount: BigInt,
+  contractor: Address
 ): Deposited {
   let depositedEvent = changetype<Deposited>(newMockEvent())
 
@@ -240,14 +255,14 @@ export function createDepositedEvent(
   )
   depositedEvent.parameters.push(
     new ethereum.EventParam(
-      "paymentToken",
-      ethereum.Value.fromAddress(paymentToken)
+      "totalDepositAmount",
+      ethereum.Value.fromUnsignedBigInt(totalDepositAmount)
     )
   )
   depositedEvent.parameters.push(
     new ethereum.EventParam(
-      "totalDepositAmount",
-      ethereum.Value.fromUnsignedBigInt(totalDepositAmount)
+      "contractor",
+      ethereum.Value.fromAddress(contractor)
     )
   )
 
@@ -257,7 +272,8 @@ export function createDepositedEvent(
 export function createDisputeCreatedEvent(
   sender: Address,
   contractId: BigInt,
-  weekId: BigInt
+  weekId: BigInt,
+  client: Address
 ): DisputeCreated {
   let disputeCreatedEvent = changetype<DisputeCreated>(newMockEvent())
 
@@ -275,6 +291,9 @@ export function createDisputeCreatedEvent(
   disputeCreatedEvent.parameters.push(
     new ethereum.EventParam("weekId", ethereum.Value.fromUnsignedBigInt(weekId))
   )
+  disputeCreatedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
+  )
 
   return disputeCreatedEvent
 }
@@ -285,7 +304,8 @@ export function createDisputeResolvedEvent(
   weekId: BigInt,
   winner: i32,
   clientAmount: BigInt,
-  contractorAmount: BigInt
+  contractorAmount: BigInt,
+  client: Address
 ): DisputeResolved {
   let disputeResolvedEvent = changetype<DisputeResolved>(newMockEvent())
 
@@ -320,6 +340,9 @@ export function createDisputeResolvedEvent(
       "contractorAmount",
       ethereum.Value.fromUnsignedBigInt(contractorAmount)
     )
+  )
+  disputeResolvedEvent.parameters.push(
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
   )
 
   return disputeResolvedEvent
@@ -394,7 +417,7 @@ export function createRegistryUpdatedEvent(registry: Address): RegistryUpdated {
 export function createReturnApprovedEvent(
   approver: Address,
   contractId: BigInt,
-  weekId: BigInt
+  client: Address
 ): ReturnApproved {
   let returnApprovedEvent = changetype<ReturnApproved>(newMockEvent())
 
@@ -410,7 +433,7 @@ export function createReturnApprovedEvent(
     )
   )
   returnApprovedEvent.parameters.push(
-    new ethereum.EventParam("weekId", ethereum.Value.fromUnsignedBigInt(weekId))
+    new ethereum.EventParam("client", ethereum.Value.fromAddress(client))
   )
 
   return returnApprovedEvent
@@ -418,8 +441,7 @@ export function createReturnApprovedEvent(
 
 export function createReturnCanceledEvent(
   sender: Address,
-  contractId: BigInt,
-  weekId: BigInt
+  contractId: BigInt
 ): ReturnCanceled {
   let returnCanceledEvent = changetype<ReturnCanceled>(newMockEvent())
 
@@ -434,17 +456,13 @@ export function createReturnCanceledEvent(
       ethereum.Value.fromUnsignedBigInt(contractId)
     )
   )
-  returnCanceledEvent.parameters.push(
-    new ethereum.EventParam("weekId", ethereum.Value.fromUnsignedBigInt(weekId))
-  )
 
   return returnCanceledEvent
 }
 
 export function createReturnRequestedEvent(
   sender: Address,
-  contractId: BigInt,
-  weekId: BigInt
+  contractId: BigInt
 ): ReturnRequested {
   let returnRequestedEvent = changetype<ReturnRequested>(newMockEvent())
 
@@ -459,9 +477,6 @@ export function createReturnRequestedEvent(
       ethereum.Value.fromUnsignedBigInt(contractId)
     )
   )
-  returnRequestedEvent.parameters.push(
-    new ethereum.EventParam("weekId", ethereum.Value.fromUnsignedBigInt(weekId))
-  )
 
   return returnRequestedEvent
 }
@@ -469,8 +484,8 @@ export function createReturnRequestedEvent(
 export function createWithdrawnEvent(
   withdrawer: Address,
   contractId: BigInt,
-  weekId: BigInt,
-  amount: BigInt
+  amount: BigInt,
+  feeAmount: BigInt
 ): Withdrawn {
   let withdrawnEvent = changetype<Withdrawn>(newMockEvent())
 
@@ -489,10 +504,13 @@ export function createWithdrawnEvent(
     )
   )
   withdrawnEvent.parameters.push(
-    new ethereum.EventParam("weekId", ethereum.Value.fromUnsignedBigInt(weekId))
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
   withdrawnEvent.parameters.push(
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+    new ethereum.EventParam(
+      "feeAmount",
+      ethereum.Value.fromUnsignedBigInt(feeAmount)
+    )
   )
 
   return withdrawnEvent

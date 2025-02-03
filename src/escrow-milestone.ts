@@ -16,28 +16,22 @@ import {
   ReturnRequested as ReturnRequestedEvent,
   Submitted as SubmittedEvent,
   Withdrawn as WithdrawnEvent,
-} from "../generated/templates/EscrowMilestone/EscrowMilestone"
+} from "../generated/EscrowMilestone/EscrowMilestone"
 import {
   AdminManagerUpdated,
-  Approved,
   BulkClaimed,
-  Claimed,
-  ClientOwnershipTransferred,
-  ContractorOwnershipTransferred,
-  Deposited,
-  DisputeCreated,
-  DisputeResolved,
+  ClientOwnershipTransferred, EscrowMilestoneAdminManagerUpdated,
   EscrowMilestoneApproved,
-  EscrowMilestoneClaimed,
+  EscrowMilestoneClaimed, EscrowMilestoneClientOwnershipTransferred,
   EscrowMilestoneContractorOwnershipTransferred,
   EscrowMilestoneDeposited,
   EscrowMilestoneDisputeCreated,
   EscrowMilestoneDisputeResolved,
   EscrowMilestoneRefilled,
+  EscrowMilestoneRegistryUpdated,
   EscrowMilestoneReturnApproved,
   EscrowMilestoneReturnCanceled,
-  EscrowMilestoneReturnRequested,
-  EscrowMilestoneSubmitted, EscrowMilestoneWithdrawn,
+  EscrowMilestoneReturnRequested, EscrowMilestoneSubmitted, EscrowMilestoneWithdrawn,
   MaxMilestonesSet,
   Refilled,
   RegistryUpdated,
@@ -46,12 +40,12 @@ import {
   ReturnRequested,
   Submitted,
   Withdrawn,
-} from "../generated/schema"
+} from '../generated/schema'
 
 export function handleAdminManagerUpdated(
   event: AdminManagerUpdatedEvent,
 ): void {
-  let entity = new AdminManagerUpdated(
+  let entity = new EscrowMilestoneAdminManagerUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.adminManager = event.params.adminManager
@@ -91,6 +85,7 @@ export function handleBulkClaimed(event: BulkClaimedEvent): void {
   entity.totalClaimedAmount = event.params.totalClaimedAmount
   entity.totalFeeAmount = event.params.totalFeeAmount
   entity.totalClientFee = event.params.totalClientFee
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -107,6 +102,8 @@ export function handleClaimed(event: ClaimedEvent): void {
   entity.contractId = event.params.contractId
   entity.milestoneId = event.params.milestoneId
   entity.amount = event.params.amount
+  entity.feeAmount = event.params.feeAmount
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -118,7 +115,7 @@ export function handleClaimed(event: ClaimedEvent): void {
 export function handleClientOwnershipTransferred(
   event: ClientOwnershipTransferredEvent,
 ): void {
-  let entity = new ClientOwnershipTransferred(
+  let entity = new EscrowMilestoneClientOwnershipTransferred(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.previousOwner = event.params.previousOwner
@@ -153,12 +150,11 @@ export function handleDeposited(event: DepositedEvent): void {
   let entity = new EscrowMilestoneDeposited(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
-  entity.sender = event.params.sender
+  entity.depositor = event.params.depositor
   entity.contractId = event.params.contractId
   entity.milestoneId = event.params.milestoneId
-  entity.paymentToken = event.params.paymentToken
   entity.amount = event.params.amount
-  entity.feeConfig = event.params.feeConfig
+  entity.contractor = event.params.contractor
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -174,6 +170,7 @@ export function handleDisputeCreated(event: DisputeCreatedEvent): void {
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
   entity.milestoneId = event.params.milestoneId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -192,6 +189,7 @@ export function handleDisputeResolved(event: DisputeResolvedEvent): void {
   entity.winner = event.params.winner
   entity.clientAmount = event.params.clientAmount
   entity.contractorAmount = event.params.contractorAmount
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -230,7 +228,7 @@ export function handleRefilled(event: RefilledEvent): void {
 }
 
 export function handleRegistryUpdated(event: RegistryUpdatedEvent): void {
-  let entity = new RegistryUpdated(
+  let entity = new EscrowMilestoneRegistryUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.registry = event.params.registry
@@ -249,6 +247,7 @@ export function handleReturnApproved(event: ReturnApprovedEvent): void {
   entity.approver = event.params.approver
   entity.contractId = event.params.contractId
   entity.milestoneId = event.params.milestoneId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -292,8 +291,9 @@ export function handleSubmitted(event: SubmittedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.sender = event.params.sender
-  entity.milestoneId = event.params.milestoneId
   entity.contractId = event.params.contractId
+  entity.milestoneId = event.params.milestoneId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -310,6 +310,7 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
   entity.contractId = event.params.contractId
   entity.milestoneId = event.params.milestoneId
   entity.amount = event.params.amount
+  entity.feeAmount = event.params.feeAmount
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

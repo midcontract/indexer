@@ -1,8 +1,7 @@
 {
   "polygon-amoy": {
     "EscrowFactory": {
-      "address": "0xE2B05184705A5b25De95DcEc77147B93B4a26f31",
-      "startBlock": 13247558
+      "address": "0x44BB077F73FD6136187EA408F695f7508E88e236"
     }
   }
 }

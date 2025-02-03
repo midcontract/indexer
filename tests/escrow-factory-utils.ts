@@ -1,6 +1,8 @@
 import { newMockEvent } from "matchstick-as"
-import { ethereum, Address } from "@graphprotocol/graph-ts"
+import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts"
 import {
+  AdminManagerUpdated,
+  ETHWithdrawn,
   EscrowProxyDeployed,
   OwnerUpdateInitiated,
   OwnershipTransferred,
@@ -8,6 +10,41 @@ import {
   RegistryUpdated,
   Unpaused
 } from "../generated/EscrowFactory/EscrowFactory"
+
+export function createAdminManagerUpdatedEvent(
+  adminManager: Address
+): AdminManagerUpdated {
+  let adminManagerUpdatedEvent = changetype<AdminManagerUpdated>(newMockEvent())
+
+  adminManagerUpdatedEvent.parameters = new Array()
+
+  adminManagerUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "adminManager",
+      ethereum.Value.fromAddress(adminManager)
+    )
+  )
+
+  return adminManagerUpdatedEvent
+}
+
+export function createETHWithdrawnEvent(
+  receiver: Address,
+  amount: BigInt
+): ETHWithdrawn {
+  let ethWithdrawnEvent = changetype<ETHWithdrawn>(newMockEvent())
+
+  ethWithdrawnEvent.parameters = new Array()
+
+  ethWithdrawnEvent.parameters.push(
+    new ethereum.EventParam("receiver", ethereum.Value.fromAddress(receiver))
+  )
+  ethWithdrawnEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+
+  return ethWithdrawnEvent
+}
 
 export function createEscrowProxyDeployedEvent(
   sender: Address,

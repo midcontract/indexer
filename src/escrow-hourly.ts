@@ -15,23 +15,18 @@ import {
   ReturnCanceled as ReturnCanceledEvent,
   ReturnRequested as ReturnRequestedEvent,
   Withdrawn as WithdrawnEvent,
-} from "../generated/templates/EscrowHourly/EscrowHourly"
+} from "../generated/EscrowHourly/EscrowHourly"
 import {
   AdminManagerUpdated,
-  Approved,
-  BulkClaimed,
-  Claimed,
-  ClientOwnershipTransferred,
-  ContractorOwnershipTransferred,
-  Deposited,
-  DisputeCreated,
-  DisputeResolved,
   EscrowHourlyApproved,
   EscrowHourlyBulkClaimed,
   EscrowHourlyClaimed,
+  EscrowHourlyClientOwnershipTransferred,
+  EscrowHourlyContractorOwnershipTransferred,
   EscrowHourlyDeposited,
   EscrowHourlyDisputeCreated,
   EscrowHourlyDisputeResolved,
+  EscrowHourlyRegistryUpdated,
   EscrowHourlyReturnApproved,
   EscrowHourlyReturnCanceled,
   EscrowHourlyReturnRequested, EscrowHourlyWithdrawn,
@@ -42,7 +37,7 @@ import {
   ReturnCanceled,
   ReturnRequested,
   Withdrawn,
-} from "../generated/schema"
+} from '../generated/schema'
 
 export function handleAdminManagerUpdated(
   event: AdminManagerUpdatedEvent,
@@ -87,6 +82,7 @@ export function handleBulkClaimed(event: BulkClaimedEvent): void {
   entity.totalClaimedAmount = event.params.totalClaimedAmount
   entity.totalFeeAmount = event.params.totalFeeAmount
   entity.totalClientFee = event.params.totalClientFee
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -103,6 +99,8 @@ export function handleClaimed(event: ClaimedEvent): void {
   entity.contractId = event.params.contractId
   entity.weekId = event.params.weekId
   entity.amount = event.params.amount
+  entity.feeAmount = event.params.feeAmount
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -114,7 +112,7 @@ export function handleClaimed(event: ClaimedEvent): void {
 export function handleClientOwnershipTransferred(
   event: ClientOwnershipTransferredEvent,
 ): void {
-  let entity = new ClientOwnershipTransferred(
+  let entity = new EscrowHourlyClientOwnershipTransferred(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.previousOwner = event.params.previousOwner
@@ -130,7 +128,7 @@ export function handleClientOwnershipTransferred(
 export function handleContractorOwnershipTransferred(
   event: ContractorOwnershipTransferredEvent,
 ): void {
-  let entity = new ContractorOwnershipTransferred(
+  let entity = new EscrowHourlyContractorOwnershipTransferred(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.contractId = event.params.contractId
@@ -151,8 +149,8 @@ export function handleDeposited(event: DepositedEvent): void {
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
   entity.weekId = event.params.weekId
-  entity.paymentToken = event.params.paymentToken
   entity.totalDepositAmount = event.params.totalDepositAmount
+  entity.contractor = event.params.contractor
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -168,6 +166,7 @@ export function handleDisputeCreated(event: DisputeCreatedEvent): void {
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
   entity.weekId = event.params.weekId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -186,6 +185,7 @@ export function handleDisputeResolved(event: DisputeResolvedEvent): void {
   entity.winner = event.params.winner
   entity.clientAmount = event.params.clientAmount
   entity.contractorAmount = event.params.contractorAmount
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -228,7 +228,7 @@ export function handleRefilledWeekPayment(
 }
 
 export function handleRegistryUpdated(event: RegistryUpdatedEvent): void {
-  let entity = new RegistryUpdated(
+  let entity = new EscrowHourlyRegistryUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32()),
   )
   entity.registry = event.params.registry
@@ -246,7 +246,7 @@ export function handleReturnApproved(event: ReturnApprovedEvent): void {
   )
   entity.approver = event.params.approver
   entity.contractId = event.params.contractId
-  entity.weekId = event.params.weekId
+  entity.client = event.params.client
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -261,7 +261,6 @@ export function handleReturnCanceled(event: ReturnCanceledEvent): void {
   )
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
-  entity.weekId = event.params.weekId
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -276,7 +275,6 @@ export function handleReturnRequested(event: ReturnRequestedEvent): void {
   )
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
-  entity.weekId = event.params.weekId
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -291,8 +289,8 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
   )
   entity.withdrawer = event.params.withdrawer
   entity.contractId = event.params.contractId
-  entity.weekId = event.params.weekId
   entity.amount = event.params.amount
+  entity.feeAmount = event.params.feeAmount
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

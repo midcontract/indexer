@@ -1,3 +1,20 @@
+type EscrowFactoryAdminManagerUpdated @entity(immutable: true) {
+  id: Bytes!
+  adminManager: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ETHWithdrawn @entity(immutable: true) {
+  id: Bytes!
+  receiver: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type EscrowProxyDeployed @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
@@ -72,8 +89,9 @@ type Claimed @entity(immutable: true) {
   id: Bytes!
   contractor: Bytes! # address
   contractId: BigInt! # uint256
-  paymentToken: Bytes! # address
   amount: BigInt! # uint256
+  feeAmount: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -100,11 +118,10 @@ type ContractorOwnershipTransferred @entity(immutable: true) {
 
 type Deposited @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
+  depositor: Bytes! # address
   contractId: BigInt! # uint256
-  paymentToken: Bytes! # address
-  amount: BigInt! # uint256
-  feeConfig: Int! # uint8
+  totalDepositAmount: BigInt! # uint256
+  contractor: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -114,6 +131,7 @@ type DisputeCreated @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   contractId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -126,6 +144,7 @@ type DisputeResolved @entity(immutable: true) {
   winner: Int! # uint8
   clientAmount: BigInt! # uint256
   contractorAmount: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -153,6 +172,7 @@ type ReturnApproved @entity(immutable: true) {
   id: Bytes!
   approver: Bytes! # address
   contractId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -180,6 +200,7 @@ type Submitted @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   contractId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -189,8 +210,8 @@ type Withdrawn @entity(immutable: true) {
   id: Bytes!
   withdrawer: Bytes! # address
   contractId: BigInt! # uint256
-  paymentToken: Bytes! # address
   amount: BigInt! # uint256
+  feeAmount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -224,6 +245,7 @@ type BulkClaimed @entity(immutable: true) {
   totalClaimedAmount: BigInt! # uint256
   totalFeeAmount: BigInt! # uint256
   totalClientFee: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -235,6 +257,8 @@ type EscrowMilestoneClaimed @entity(immutable: true) {
   contractId: BigInt! # uint256
   milestoneId: BigInt! # uint256
   amount: BigInt! # uint256
+  feeAmount: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -262,12 +286,11 @@ type EscrowMilestoneContractorOwnershipTransferred @entity(immutable: true) {
 
 type EscrowMilestoneDeposited @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
+  depositor: Bytes! # address
   contractId: BigInt! # uint256
   milestoneId: BigInt! # uint256
-  paymentToken: Bytes! # address
   amount: BigInt! # uint256
-  feeConfig: Int! # uint8
+  contractor: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -278,6 +301,7 @@ type EscrowMilestoneDisputeCreated @entity(immutable: true) {
   sender: Bytes! # address
   contractId: BigInt! # uint256
   milestoneId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -291,6 +315,7 @@ type EscrowMilestoneDisputeResolved @entity(immutable: true) {
   winner: Int! # uint8
   clientAmount: BigInt! # uint256
   contractorAmount: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -328,6 +353,7 @@ type EscrowMilestoneReturnApproved @entity(immutable: true) {
   approver: Bytes! # address
   contractId: BigInt! # uint256
   milestoneId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -356,8 +382,9 @@ type EscrowMilestoneReturnRequested @entity(immutable: true) {
 type EscrowMilestoneSubmitted @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
-  milestoneId: BigInt! # uint256
   contractId: BigInt! # uint256
+  milestoneId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -369,6 +396,7 @@ type EscrowMilestoneWithdrawn @entity(immutable: true) {
   contractId: BigInt! # uint256
   milestoneId: BigInt! # uint256
   amount: BigInt! # uint256
+  feeAmount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -402,6 +430,7 @@ type EscrowHourlyBulkClaimed @entity(immutable: true) {
   totalClaimedAmount: BigInt! # uint256
   totalFeeAmount: BigInt! # uint256
   totalClientFee: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -413,6 +442,8 @@ type EscrowHourlyClaimed @entity(immutable: true) {
   contractId: BigInt! # uint256
   weekId: BigInt! # uint256
   amount: BigInt! # uint256
+  feeAmount: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -442,8 +473,8 @@ type EscrowHourlyDeposited @entity(immutable: true) {
   sender: Bytes! # address
   contractId: BigInt! # uint256
   weekId: BigInt! # uint256
-  paymentToken: Bytes! # address
   totalDepositAmount: BigInt! # uint256
+  contractor: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -454,6 +485,7 @@ type EscrowHourlyDisputeCreated @entity(immutable: true) {
   sender: Bytes! # address
   contractId: BigInt! # uint256
   weekId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -467,6 +499,7 @@ type EscrowHourlyDisputeResolved @entity(immutable: true) {
   winner: Int! # uint8
   clientAmount: BigInt! # uint256
   contractorAmount: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -505,7 +538,7 @@ type EscrowHourlyReturnApproved @entity(immutable: true) {
   id: Bytes!
   approver: Bytes! # address
   contractId: BigInt! # uint256
-  weekId: BigInt! # uint256
+  client: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -515,7 +548,6 @@ type EscrowHourlyReturnCanceled @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   contractId: BigInt! # uint256
-  weekId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -525,7 +557,6 @@ type EscrowHourlyReturnRequested @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   contractId: BigInt! # uint256
-  weekId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -535,8 +566,8 @@ type EscrowHourlyWithdrawn @entity(immutable: true) {
   id: Bytes!
   withdrawer: Bytes! # address
   contractId: BigInt! # uint256
-  weekId: BigInt! # uint256
   amount: BigInt! # uint256
+  feeAmount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
