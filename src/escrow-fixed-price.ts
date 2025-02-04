@@ -14,7 +14,7 @@ import {
   ReturnRequested as ReturnRequestedEvent,
   Submitted as SubmittedEvent,
   Withdrawn as WithdrawnEvent,
-} from "../generated/EscrowFixedPrice/EscrowFixedPrice"
+} from "../generated/templates/EscrowFixedPrice/EscrowFixedPrice"
 import {
   AdminManagerUpdated,
   Approved,

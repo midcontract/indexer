@@ -15,7 +15,7 @@ import {
   ReturnCanceled as ReturnCanceledEvent,
   ReturnRequested as ReturnRequestedEvent,
   Withdrawn as WithdrawnEvent,
-} from "../generated/EscrowHourly/EscrowHourly"
+} from "../generated/templates/EscrowHourly/EscrowHourly"
 import {
   AdminManagerUpdated,
   EscrowHourlyApproved,
@@ -32,11 +32,6 @@ import {
   EscrowHourlyReturnRequested, EscrowHourlyWithdrawn,
   RefilledPrepayment,
   RefilledWeekPayment,
-  RegistryUpdated,
-  ReturnApproved,
-  ReturnCanceled,
-  ReturnRequested,
-  Withdrawn,
 } from '../generated/schema'
 
 export function handleAdminManagerUpdated(

@@ -16,11 +16,10 @@ import {
   ReturnRequested as ReturnRequestedEvent,
   Submitted as SubmittedEvent,
   Withdrawn as WithdrawnEvent,
-} from "../generated/EscrowMilestone/EscrowMilestone"
+} from "../generated/templates/EscrowMilestone/EscrowMilestone"
 import {
-  AdminManagerUpdated,
   BulkClaimed,
-  ClientOwnershipTransferred, EscrowMilestoneAdminManagerUpdated,
+  EscrowMilestoneAdminManagerUpdated,
   EscrowMilestoneApproved,
   EscrowMilestoneClaimed, EscrowMilestoneClientOwnershipTransferred,
   EscrowMilestoneContractorOwnershipTransferred,
@@ -33,13 +32,6 @@ import {
   EscrowMilestoneReturnCanceled,
   EscrowMilestoneReturnRequested, EscrowMilestoneSubmitted, EscrowMilestoneWithdrawn,
   MaxMilestonesSet,
-  Refilled,
-  RegistryUpdated,
-  ReturnApproved,
-  ReturnCanceled,
-  ReturnRequested,
-  Submitted,
-  Withdrawn,
 } from '../generated/schema'
 
 export function handleAdminManagerUpdated(
