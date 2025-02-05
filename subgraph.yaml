@@ -65,7 +65,6 @@ templates:
         - DisputeCreated
         - DisputeResolved
         - Refilled
-        - EscrowFixedPriceRegistryUpdated
         - ReturnApproved
         - ReturnCanceled
         - ReturnRequested
@@ -93,8 +92,6 @@ templates:
           handler: handleDisputeResolved
         - event: Refilled(indexed address,indexed uint256,uint256)
           handler: handleRefilled
-        - event: RegistryUpdated(address)
-          handler: handleRegistryUpdated
         - event: ReturnApproved(indexed address,uint256,indexed address)
           handler: handleReturnApproved
         - event: ReturnCanceled(indexed address,uint256)

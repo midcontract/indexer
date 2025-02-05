@@ -10,7 +10,6 @@ import {
   DisputeCreated,
   DisputeResolved,
   Refilled,
-  RegistryUpdated,
   ReturnApproved,
   ReturnCanceled,
   ReturnRequested,
@@ -290,18 +289,6 @@ export function createRefilledEvent(
   )
 
   return refilledEvent
-}
-
-export function createRegistryUpdatedEvent(registry: Address): RegistryUpdated {
-  let registryUpdatedEvent = changetype<RegistryUpdated>(newMockEvent())
-
-  registryUpdatedEvent.parameters = new Array()
-
-  registryUpdatedEvent.parameters.push(
-    new ethereum.EventParam("registry", ethereum.Value.fromAddress(registry))
-  )
-
-  return registryUpdatedEvent
 }
 
 export function createReturnApprovedEvent(

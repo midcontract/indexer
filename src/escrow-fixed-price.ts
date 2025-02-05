@@ -8,7 +8,6 @@ import {
   DisputeCreated as DisputeCreatedEvent,
   DisputeResolved as DisputeResolvedEvent,
   Refilled as RefilledEvent,
-  RegistryUpdated as RegistryUpdatedEvent,
   ReturnApproved as ReturnApprovedEvent,
   ReturnCanceled as ReturnCanceledEvent,
   ReturnRequested as ReturnRequestedEvent,
@@ -25,7 +24,6 @@ import {
   DisputeCreated,
   DisputeResolved,
   Refilled,
-  RegistryUpdated,
   ReturnApproved,
   ReturnCanceled,
   ReturnRequested,
@@ -170,19 +168,6 @@ export function handleRefilled(event: RefilledEvent): void {
   entity.sender = event.params.sender
   entity.contractId = event.params.contractId
   entity.amountAdditional = event.params.amountAdditional
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleRegistryUpdated(event: RegistryUpdatedEvent): void {
-  let entity = new RegistryUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32()),
-  )
-  entity.registry = event.params.registry
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
