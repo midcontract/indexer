@@ -19,6 +19,14 @@ import {
   Unpaused,
 } from "../generated/schema"
 
+import { EscrowFixedPrice, EscrowMilestone, EscrowHourly } from "../generated/templates"
+
+export enum EscrowType {
+  FixedPrice,
+  Milestone,
+  Hourly,
+}
+
 export function handleAdminManagerUpdated(
   event: AdminManagerUpdatedEvent,
 ): void {
@@ -63,6 +71,18 @@ export function handleEscrowProxyDeployed(
   entity.transactionHash = event.transaction.hash
 
   entity.save()
+
+  switch (event.params.escrowType) {
+    case EscrowType.FixedPrice:
+      EscrowFixedPrice.create(event.params.deployedProxy)
+      break;
+    case EscrowType.Milestone:
+      EscrowMilestone.create(event.params.deployedProxy)
+      break;
+    case EscrowType.Hourly:
+      EscrowHourly.create(event.params.deployedProxy)
+      break;
+  }
 }
 
 export function handleOwnerUpdateInitiated(
